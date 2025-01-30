@@ -659,6 +659,7 @@ def store_cover(content: str, tracking: dict, new: bool = False) -> None:
             frf = fr.RepoFilter(args, commit_callback=fred.callback)
             logger.info('Invoking git-filter-repo to update the cover letter.')
             frf.run()
+            fred.update_notes()
 
     if strategy == 'branch-description':
         mybranch = b4.git_get_current_branch(None)
@@ -774,6 +775,15 @@ class FRCommitMessageEditor:
     def callback(self, commit, metadata):  # noqa
         if commit.original_id in self.edit_map:
             commit.message = self.edit_map[commit.original_id]
+
+    def update_notes(self):
+        fr_map_file = os.path.join('.git', 'filter-repo', 'commit-map')
+        with open(os.path.join(b4.git_get_toplevel(), fr_map_file), 'br') as f:
+            f.readline() # Skip header
+            args = ['notes', 'copy', '--force', '--stdin']
+            ecode, out = b4.git_run_command(None, args, stdin=f.read(), logstderr=True)
+            if ecode > 0:
+                logger.info('FAIL: update_notes: %s', out)
 
 
 def edit_cover() -> None:
@@ -1208,6 +1218,7 @@ def update_trailers(cmdargs: argparse.Namespace) -> None:
     frf = fr.RepoFilter(args, commit_callback=fred.callback)
     logger.info('Invoking git-filter-repo to update trailers.')
     frf.run()
+    fred.update_notes()
     logger.info('Trailers updated.')
 
 

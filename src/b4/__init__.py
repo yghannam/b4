@@ -3491,6 +3491,7 @@ def git_range_to_patches(gitdir: Optional[str], start: str, end: str,
             logger.debug('Ignoring commit %s', commit)
             continue
         showargs = [
+            '--notes',
             '--format=email',
             '--binary',
             '--patch-with-stat',

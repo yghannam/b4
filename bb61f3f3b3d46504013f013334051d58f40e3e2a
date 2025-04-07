@@ -1,0 +1,10 @@
+Discussion:
+Why use git-filter-repo?
+
+Is it to rewrite history without user input?
+
+Git 2.44 allows 'rebase --autosquash' for non-interactive rebasing.
+https://raw.githubusercontent.com/git/git/master/Documentation/RelNotes/2.44.0.adoc
+
+Maybe this can be used in the future and git-filter-repo can be
+deprecated.

@@ -1985,6 +1985,8 @@ def cmd_send(cmdargs: argparse.Namespace) -> None:
                     if pair[1] not in seen:
                         extracc.append(pair)
                 if extracc:
+                    extracc = b4.cleanup_email_addrs(extracc, excludes, None)
+                if extracc:
                     print_pretty_addrs(extracc, '    +Cc')
 
         logger.info('---')
